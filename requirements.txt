@@ -1,35 +1,35 @@
-atomicwrites==1.1.5
-attrs==18.1.0
-behave==1.2.6
-cached-property==1.4.3
-cassandra-driver==3.14.0
-certifi==2018.8.13
-chardet==3.0.4
-click==6.7
-docker==3.5.0
-docker-compose==1.22.0
-docker-pycreds==0.3.0
-dockerpty==0.4.1
-docopt==0.6.2
-Flask==1.0.2
-flask-accept==0.0.6
-idna==2.6
-itsdangerous==0.24
-Jinja2==2.11.3
-jsonschema==2.6.0
-MarkupSafe==1.0
-more-itertools==4.3.0
-nose==1.3.7
-parse==1.8.4
-parse-type==0.4.2
-pluggy==0.7.1
-py==1.5.4
-pytest==3.7.2
-PyYAML==5.4
-requests==2.20.0
-rfc3986==1.1.0
-six==1.11.0
-texttable==0.9.1
-urllib3==1.24.2
-websocket-client==0.51.0
-Werkzeug==0.15.3
+# atomicwrites
+# attrs
+# behave
+# cached-property
+cassandra-driver
+# certifi
+# chardet
+click
+# docker
+# docker-compose
+# docker-pycreds
+# dockerpty
+# docopt
+Flask
+flask-accept
+# idna
+# itsdangerous
+# Jinja2
+# jsonschema
+# MarkupSafe
+# more-itertools
+# nose
+# parse
+# parse-type
+# pluggy
+# py
+pytest
+PyYAML
+requests
+rfc3986
+# six
+# texttable
+urllib3
+websocket-client
+Werkzeug
