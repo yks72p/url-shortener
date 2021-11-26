@@ -1,5 +1,10 @@
 # URL Shortener
 
+## Project description
+Web-based service to transform usual URLs to short format
+
+## Build and run
+
 * Build application with:
     ```bash
     docker-compose build
@@ -39,26 +44,114 @@
     curl -X GET http://localhost:5000/getURL/AQE=
     ```
 
+    sample output:
+    ```
+    https://yandex.by
+    ```
+
+## Architecture:
+* Flask as web framework
+* Cassandra as a data base
+* Docker for containerization
+* nginx as balancer (not working)
+* Yandex.Tank as framework for Load testing
+
+---
+
 ## Load testing
 
-* не змаглі запусьціць Overload на кастамных reqest'ах :(
+### GET reqest: `/getURL`
 
-  сервіс выдаваў альбо 400 Bad Reqest, альбо 500 Internal Error.
+Tests setup:
+* Maximum load: const(2rps, 30s), line(2rps, 30rps, 5m)
+* Stability test: const(4rps, 5m)
 
-* паспрабуем выправіць і дадаць аналіз нагрузкі да заліку
+Results:
+
+Maximum load   |  Stability
+:-------------------------:|:-------------------------:
+![01](img/01_get.png)        |  ![03](img/03_get_stability.png)
+
+* After rps (requests per second) increase to 7, failures occur and
+server starts to respond with 500 code.
+* rps = 3 would probably be a maximum stable load for the service, 
+as for rps=4 almost no erros happen, 
+but still there are couple of them
 
 
-<!-- 73 good
-GET /getURL/AQE= HTTP/1.0
-Host: 172.18.0.3:5000
-User-Agent: xxx (shell 1) 
+### Reason of bad results
 
-296 good
-POST /createURL HTTP/1.0
-Host: 172.18.0.3:5000
-User-Agent: xxx (shell 1)
-Content-Type: application/json
+rps = 3 is quite poor result for maximum stable load 
+for such a simple service. 
+the reason could be slow work of Cassandra.
 
-{"original_url":"https://yandex.by"}
+To prove our assumption we've conducted Maximum load test 
+without using Cassandra - on each `/getURL` request we
+respond with a stub:
+```python
+@api.route('/getURL/<string:url_hash>', methods=['GET'])
+def get_url(url_hash):
+    stub = "https://some-stub-url-used-for-debug-purpose.by"
+    return stub
 
--->
+    # original_url = db.get_original_url(url_utils.decode_short_id(url_hash))
+    # if original_url is None:
+    #     return abort(404)
+    # else:
+    #     return original_url
+```
+
+In this mode maximum load is much more than 7. 
+Test was interrupted as response time exceeded threshold:
+`response time >1s for >=15s in a row`. 
+
+The maximum obtained rps before timeouts occured waas ~885.
+
+![02](img/02_get_no_cassandra.png)
+
+### POST request: `/createURL`
+
+Results similar to load testing of `/getURL` were obtained in this case.
+
+Tests setup:
+* Maximum load: const(2rps, 30s), line(2rps, 30rps, 5m)
+* Stability test: const(4rps, 5m)
+
+
+Maximum load   |  Stability
+:-------------------------:|:-------------------------:
+![04](img/04_post.png)        |  ![05](img/05_post_stability.png)
+
+* Maximum load: 8rps
+* Maximum stable load: 3rps
+
+---
+
+## Conclusions:
+
+Due to the poor setup of Cassandra database we obtain poor performance
+and low maximum load for the whole service.
+
+No performance bottleneck was noticed for Flask server. 
+Current Cassandra setup is in greater need of optimization 
+compared to Flask server.
+
+Ways to improve:
+* Optimize Cassandra setup
+* Launch more Cassandra instances and orchestrate them
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
