@@ -31,7 +31,7 @@ Web-based service to transform usual URLs to short format
     -X POST \
     -H 'Content-Type: application/json' \
     --data-raw '{"original_url":"https://yandex.by"}' \
-    http://172.18.0.3:5000/createURL
+    http://localhost:5000/createURL
     ``` 
 
     sample output:
