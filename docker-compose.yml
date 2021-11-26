@@ -1,13 +1,23 @@
 version: '3'
 services:
+
   cassandra:
     image: "cassandra:3.11.2"
     ports:
-    - "7000:7000"
-    - "9042:9042"
-  tests:
+      - "7000:7000"
+      - "9042:9042"
+
+  flask_app:
     build: .
     links:
-      - cassandra
+      - cassandra  # probably it's not required
+    # ports:
+      # - "5000:5000"
+
+  nginx:
+    container_name: nginx
+    build: nginx
     ports:
-    - "5000:5000"
+      - 80:80  # 80:8080 ????
+    depends_on:
+      - flask_app
