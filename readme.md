@@ -15,6 +15,11 @@ Web-based service to transform usual URLs to short format
     docker-compose up
     ```
 
+* Rebuild and specify how many container instances to start:
+    ```bash
+    docker-compose --build --scale cassandra=2
+    ```
+
     App should start on `http://localhost:5000/`
 
 ## Sample requests
