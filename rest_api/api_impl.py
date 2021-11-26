@@ -23,6 +23,9 @@ def create_url():
 
 @api.route('/getURL/<string:url_hash>', methods=['GET'])
 def get_url(url_hash):
+    # stub = "https://some-stub-url-used-for-debug-purpose.by"
+    # return stub
+
     original_url = db.get_original_url(url_utils.decode_short_id(url_hash))
     if original_url is None:
         return abort(404)
