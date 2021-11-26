@@ -82,6 +82,8 @@ server starts to respond with 500 code.
 * rps = 3 would probably be a maximum stable load for the service, 
 as for rps=4 almost no erros happen, 
 but still there are couple of them
+* For stability test, response time slowly increases 
+  from ~200ms in the beginning to ~230ms in the end of the test
 
 
 ### Reason of bad results
@@ -129,6 +131,8 @@ Maximum load   |  Stability
 
 * Maximum load: 8rps
 * Maximum stable load: 3rps
+* For stability test, response time slowly increases 
+  from ~200ms in the beginning to ~240ms in the end of the test
 
 ---
 
