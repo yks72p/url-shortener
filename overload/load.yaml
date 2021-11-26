@@ -1,19 +1,18 @@
 overload:
   enabled: true
   package: yandextank.plugins.DataUploader
-  token_file: "token.txt"
+  token_file: "overload/token.txt"  # you should provide your API key in this file to upload plots to Yandex.Overload
 
 phantom:
   address: 172.18.0.3:5000  # [Target's address]:[target's port]
   # ssl: true
   uris:
-    - "/scooters"
-    # - /
+    - /
     # - /page2
-    # - "/scooters"  # can set multiple uris
+
   load_profile:
     load_type: rps  # schedule load by defining requests per second
-    schedule: const(20, 3m)  # constant load of 20rps per 3 minutes
+    schedule: const(100, 1m)  # constant load of 20rps per 3 minutes
     # schedule: line(1, 10, 10m)  # starting from 1rps growing linearly to 10rps during 10 minutes
     # schedule: step(25, 5, 5, 60)  # stepped load from 25 to 5 rps, with 5 rps steps, step duration 60s.
     # schedule: line(1, 10, 10m) const(10,10m)  # can combine primitives
