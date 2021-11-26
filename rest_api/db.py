@@ -64,13 +64,9 @@ def init_db():
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
-    """Execute the DDL for the keyspace."""
     init_db()
     click.echo('Initialized the Cassandra keyspace.')
 
 
 def init_app(app):
-    """Register database functions with the Flask app. This is called by
-    the application factory.
-    """
     app.cli.add_command(init_db_command)

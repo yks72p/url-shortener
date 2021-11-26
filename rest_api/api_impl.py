@@ -1,60 +1,30 @@
 import json
-from flask import make_response, jsonify, request, Blueprint, redirect, Response, current_app, abort
-from flask_accept import accept
-from rfc3986.exceptions import RFC3986Exception
-from urllib.parse import urlparse
-from werkzeug.exceptions import NotAcceptable
+from datetime import timedelta, date
+from flask import request, Blueprint, abort
 
-from rest_api import db, id_cache
-from rest_api.url_logic import encode_short_id, decode_short_id, enforce_scheme, validate_url
+from rest_api import db, url_utils
 
 api = Blueprint("api", __name__)
 
 
-@api.app_errorhandler(NotAcceptable)
-def http_error_handler(error):
-    return make_response(jsonify({'error': "HTTP {}".format(error)}), error.code)
-
-
-@api.app_errorhandler(RFC3986Exception)
-def http_error_handler(error):
-    return make_response(jsonify({'error': "Bad Request {}".format(error)}), 400)
-
-
-@api.route('/shorten_url', methods=['POST'])
-@accept('application/json')
-def shorten_url():
-    """
-    Example curl call:
-    curl -d '{"url": "www.helloworld.com"}' -H "Content-Type: application/json" -H "Accept: application/json" -X \
-    POST http://localhost:5000/shorten_url
-    :return:
-    """
+@api.route('/createURL', methods=['POST'])
+def create_url():
     contents = request.get_json()
-    if "url" not in contents:
-        abort(400)  # If input json has no url key, then it's a bad request
-    original_url = contents["url"]
+    if not request.json or not 'original_url' in request.json:
+        abort(400)
+    original_url = contents['original_url']
 
-    original_url = enforce_scheme(original_url, default_scheme=request.scheme)
-    validate_url(original_url)
-
-    short_id = id_cache.get_a_new_id()
+    short_id = url_utils.get_a_new_id()
     db.upsert_short_url(short_id, original_url)
-    response = {"shortened_url": "{}{}".format(current_app.config['SHORT_URL_PREFIX'], encode_short_id(short_id))}
-    return Response(json.dumps(response), status=201, mimetype='application/json')
+    response = {"short_link": "{}/getURL/{}".format(current_app.config['SHORT_URL_PREFIX'], url_utils.encode_short_id(short_id)),
+                'original_url': original_url, 'expire_date': str(date.today() + timedelta(days=30))}
+    return json.dumps(response)
 
 
-@api.route('/<string:short_id>', methods=['GET'])
-def get_url(short_id):
-    original_url = db.get_original_url(decode_short_id(short_id))
+@api.route('/getURL/<string:url_hash>', methods=['GET'])
+def get_url(url_hash):
+    original_url = db.get_original_url(url_utils.decode_short_id(url_hash))
     if original_url is None:
-        return make_response(jsonify({'error': 'Not found {}'.format(short_id)}), 404)
+        return abort(404)
     else:
-        if not urlparse(original_url).scheme:
-            original_url = "http://{}".format(original_url)
-        return redirect(original_url, code=301)
-
-
-@api.route('/')
-def hello():
-    return "Welcome to url-shortnener"  # TODO show user docs on this endpoint
+        return original_url
