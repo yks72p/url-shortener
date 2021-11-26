@@ -12,7 +12,7 @@
 
     App should start on `http://localhost:5000/`
 
-### Sample requests
+## Sample requests
 
 * POST
 
@@ -38,6 +38,15 @@
     ```bash
     curl -X GET http://localhost:5000/getURL/AQE=
     ```
+
+## Load testing
+
+* не змаглі запусьціць Overload на кастамных reqest'ах :(
+
+  сервіс выдаваў альбо 400 Bad Reqest, альбо 500 Internal Error.
+
+* паспрабуем выправіць і дадаць аналіз нагрузкі да заліку
+
 
 <!-- 73 good
 GET /getURL/AQE= HTTP/1.0
