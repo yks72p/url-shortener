@@ -51,9 +51,9 @@ Web-based service to transform usual URLs to short format
 
 ## Architecture:
 * Flask as web framework
-* Cassandra as a data base
+* Cassandra as a database
 * Docker for containerization
-* nginx as balancer (not working)
+* _nginx as balancer (not working)_
 * Yandex.Tank as framework for Load testing
 
 ---
@@ -129,10 +129,10 @@ Maximum load   |  Stability
 
 ## Conclusions:
 
-Due to the poor setup of Cassandra database we obtain poor performance
-and low maximum load for the whole service.
+Due to the poor setup of Cassandra database we the whole service 
+shows low performance in terms of maximum load and reliability.
 
-No performance bottleneck was noticed for Flask server. 
+In contrast, no performance bottleneck was noticed for Flask server. 
 Current Cassandra setup is in greater need of optimization 
 compared to Flask server.
 
