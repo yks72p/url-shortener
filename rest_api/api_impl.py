@@ -1,6 +1,6 @@
 import json
 from datetime import timedelta, date
-from flask import request, Blueprint, abort
+from flask import request, Blueprint, abort, current_app
 
 from rest_api import db, url_utils
 
