@@ -16,10 +16,10 @@ phantom:
 
   load_profile:
     load_type: rps  # schedule load by defining requests per second
-    # schedule: const(2, 30s) line(2, 40, 5m)
+    schedule: const(2, 30s) line(1, 100, 5m)
 
-    schedule: const(2, 10s)  # constant load of 20rps per 3 minutes
-    # schedule: line(1, 10, 10m)  # starting from 1rps growing linearly to 10rps during 10 minutes
+    # schedule: const(2, 10s)  # constant load of 20rps per 3 minutes
+    
     # schedule: step(25, 5, 5, 60)  # stepped load from 25 to 5 rps, with 5 rps steps, step duration 60s.
     # schedule: line(1, 10, 10m) const(10,10m)  # can combine primitives
 
