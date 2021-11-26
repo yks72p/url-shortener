@@ -4,13 +4,20 @@ overload:
   token_file: "overload/token.txt"  # you should provide your API key in this file to upload plots to Yandex.Overload
 
 phantom:
+  address: 172.18.0.3:5000  # [Target's address]:[target's port]
+
+  # for POST
   # ammo_type: uripost
   # ammofile: overload/requests.ammo
-  address: 172.18.0.3:5000  # [Target's address]:[target's port]
+  
+  # for GET
   uris:
   - "/getURL/AQE="
+
   load_profile:
     load_type: rps  # schedule load by defining requests per second
+    # schedule: const(2, 30s) line(2, 40, 5m)
+
     schedule: const(2, 10s)  # constant load of 20rps per 3 minutes
     # schedule: line(1, 10, 10m)  # starting from 1rps growing linearly to 10rps during 10 minutes
     # schedule: step(25, 5, 5, 60)  # stepped load from 25 to 5 rps, with 5 rps steps, step duration 60s.
@@ -18,7 +25,7 @@ phantom:
 
 autostop:
   autostop:
-  - time(1s,10s)
+  - time(1s,7s)
 
 console:
   enabled: true  # enable console output
