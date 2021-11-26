@@ -14,8 +14,42 @@
 
 ### Sample requests
 
-* TODO: replace with new ones
+* POST
 
     ```bash
-    curl -d '{"url": "www.helloworld.com"}' -H "Content-Type: application/json" -H "Accept: application/json" -X POST http://localhost:5000/shorten_url
+    curl \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    --data-raw '{"original_url":"https://yandex.by"}' \
+    http://172.18.0.3:5000/createURL
     ``` 
+
+    sample output:
+    ```bash
+    {
+        "short_link": "http://localhost:5000//getURL/AQM=", 
+        "original_url": "https://yandex.by", 
+        "expire_date": "2021-12-26"
+    }
+    ```
+
+* GET:
+
+    ```bash
+    curl -X GET http://localhost:5000/getURL/AQE=
+    ```
+
+<!-- 73 good
+GET /getURL/AQE= HTTP/1.0
+Host: 172.18.0.3:5000
+User-Agent: xxx (shell 1) 
+
+296 good
+POST /createURL HTTP/1.0
+Host: 172.18.0.3:5000
+User-Agent: xxx (shell 1)
+Content-Type: application/json
+
+{"original_url":"https://yandex.by"}
+
+-->
